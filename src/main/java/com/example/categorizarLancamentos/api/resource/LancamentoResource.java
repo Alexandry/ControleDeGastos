@@ -46,7 +46,7 @@ public class LancamentoResource {
 	@GetMapping("/{codigo}")
 	public ResponseEntity<Lancamento> buscarLancamentoPorCodigo(@PathVariable Long codigo){
 		
-		Lancamento lancamento = lancamentoRepository.findOne(codigo);
+		Lancamento lancamento = this.lancamento.findById(codigo);
 		
 		return lancamento != null ? ResponseEntity.ok(lancamento) : ResponseEntity.notFound().build();				
 		
@@ -60,11 +60,7 @@ public class LancamentoResource {
 		Lancamento lancamentoSalvo = this.lancamento.salvarLancamento(lancamento);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, lancamento.getCodigo()));
 		
-		if (lancamentoSalvo.getCategoria() == null) {
-			this.lancamento.validarCategoriazacaoAutomatica(lancamentoSalvo.getCodigo());
-			
-		}
-		
+		this.lancamento.categoriaIsNotNull(lancamentoSalvo);
 		
 		return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
 		

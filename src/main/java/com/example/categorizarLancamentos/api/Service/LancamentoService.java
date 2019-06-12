@@ -1,6 +1,6 @@
 package com.example.categorizarLancamentos.api.Service;
 
-import java.time.Instant;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -14,6 +14,7 @@ import com.example.categorizarLancamentos.api.model.Categoria;
 import com.example.categorizarLancamentos.api.model.Lancamento;
 import com.example.categorizarLancamentos.api.repository.CategoriaRepository;
 import com.example.categorizarLancamentos.api.repository.LancamentoRepository;
+import com.example.categorizarLancamentos.api.repository.lancamento.LancamentoRepositoryImpl;
 
 @Service
 public class LancamentoService {
@@ -43,6 +44,23 @@ public class LancamentoService {
 		
 		return lancamentoRepository.save(lancamento);
 	}
+	
+	public Lancamento findById(Long codigo) {
+		
+		return lancamentoRepository.findOne(codigo);
+	}
+	
+	@Async("fileExecutor")
+	public void categoriaIsNotNull(Lancamento lancamentoSalvo) {
+		
+		
+		if (lancamentoSalvo.getCategoria() == null) {
+			validarCategoriazacaoAutomatica(lancamentoSalvo.getCodigo());
+			
+		}
+		
+	}
+	
 
 	private Lancamento buscarLancamentoPeloCodigo(Long codigo) {
 		
@@ -56,8 +74,8 @@ public class LancamentoService {
 		return lancamento;
 	}
 
-	@Async("fileExecutor")
-	public Lancamento validarCategoriazacaoAutomatica(Long codigo) {
+	
+	private Lancamento validarCategoriazacaoAutomatica(Long codigo) {
 		
 			Lancamento lancamentoSalvo = buscarLancamentoPeloCodigo(codigo);
 		
@@ -90,6 +108,10 @@ public class LancamentoService {
 		return lancamentoSalvo;
 		
 	}
+
+	
+
+
 	
 	
 	
