@@ -1,5 +1,7 @@
 package com.example.categorizarLancamentos.api.lancamentos;
 
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.validateMockitoUsage;
 import static org.mockito.Mockito.when;
 
@@ -68,6 +70,5 @@ public class LancamentoServiceTest {
 		assertNotEquals(lancamentoSalvo, lancamento);
 		Mockito.when(lancamentoService.salvarLancamento(lancamento)).thenReturn(lancamento);
 	}
-	
 	
 }
